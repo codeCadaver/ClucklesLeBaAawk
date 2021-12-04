@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private float _jumpHeight = 10f;
     [SerializeField] private float _attackDelay = 0.2f;
     [SerializeField] private float _speed = 10f;
-    [SerializeField] private int _health = 3;
+    [SerializeField] private int _maxHealth = 3;
     [SerializeField] private Transform _startPosition;
 
     private int _isGroundedHash = Animator.StringToHash("isGrounded");
@@ -37,14 +38,15 @@ public class Player : MonoBehaviour, IDamageable
     private Vector3 _wallSurfaceNormal;
 
     public int Health { get; set; }
-    public bool IsAlive { get; set; }
+    public bool IsAlive { get; private set; }
     
     void Start()
     {
         _animator = GetComponent<Animator>();
         _character = GetComponent<CharacterController>();
+        Health = _maxHealth;
         _currentSpeed = _speed;
-        _character.transform.rotation = Quaternion.Euler(new Vector3(0, _startRotation, 0));
+        _character.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
     }
 
     void Update()
@@ -65,8 +67,8 @@ public class Player : MonoBehaviour, IDamageable
         // Change Direction
         if (h != 0)
         {
-            _character.transform.rotation = Quaternion.Euler(new Vector3(0, 90 * Mathf.Sign(h), 0));
-            _currentRotation = _character.transform.rotation;
+            _currentRotation = Quaternion.Euler(new Vector3(0, 90 * Mathf.Sign(h), 0));
+            _character.transform.rotation = _currentRotation;
         }
         
         // walk animation
@@ -103,6 +105,11 @@ public class Player : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.Space)  && _canFlap)
         {
             _animator.SetBool(_shouldFlapHash, !_character.isGrounded);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            _animator.SetBool(_shouldFlapHash, false);
         }
     }
 
@@ -152,7 +159,7 @@ public class Player : MonoBehaviour, IDamageable
             _currentGravity = _gravity;
         }
 
-        _yVelocity -= _currentGravity;
+        _yVelocity -= _currentGravity * Time.deltaTime;
     }
 
     private void IsFlapping()
@@ -178,8 +185,8 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Damage(int damageAmount)
     {
-        _health -= damageAmount;
-        if (_health <= 0)
+        Health -= damageAmount;
+        if (Health <= 0)
         {
             _character.enabled = false;
             Death();
@@ -191,5 +198,6 @@ public class Player : MonoBehaviour, IDamageable
         // Death Sequence
         transform.position = _startPosition.position;
         _character.enabled = true;
+        Health = _maxHealth;
     }
 }
