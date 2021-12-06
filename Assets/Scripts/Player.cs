@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float _startRotation = 180f;
     [SerializeField] private float _gravity = 1f;
     [SerializeField] private float _floatGravity = 0.2f;
     [SerializeField] private float _jumpHeight = 10f;
@@ -16,6 +15,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private int _maxHealth = 3;
     [SerializeField] private Transform _startPosition;
 
+    private int _deathTriggerHash = Animator.StringToHash("DeathTrigger");
+    private int _idleTriggerHash = Animator.StringToHash("IdleTrigger");
     private int _isGroundedHash = Animator.StringToHash("isGrounded");
     private int _leftPunchHash = Animator.StringToHash("PunchLeft");
     private int _punchHash = Animator.StringToHash("Punch");
@@ -44,9 +45,8 @@ public class Player : MonoBehaviour, IDamageable
     {
         _animator = GetComponent<Animator>();
         _character = GetComponent<CharacterController>();
-        Health = _maxHealth;
         _currentSpeed = _speed;
-        _character.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        Reset();
     }
 
     void Update()
@@ -85,7 +85,6 @@ public class Player : MonoBehaviour, IDamageable
         {
             _canFlap = false;
             _animator.SetBool(_shouldFlapHash, !_character.isGrounded);
-            transform.rotation = _currentRotation;
             // _canDoubleJump = true;
             // _canWallJump = false;
             if (Input.GetKeyDown(KeyCode.Space))
@@ -188,6 +187,9 @@ public class Player : MonoBehaviour, IDamageable
         Health -= damageAmount;
         if (Health <= 0)
         {
+            _canMove = false;
+            _velocity = Vector3.zero;
+            IsAlive = false;
             _character.enabled = false;
             Death();
         }
@@ -196,8 +198,25 @@ public class Player : MonoBehaviour, IDamageable
     private void Death()
     {
         // Death Sequence
+        if (_character.isGrounded)
+        {
+            _animator.SetTrigger(_deathTriggerHash);
+        }
+        else
+        {
+            Reset();
+        }
+    }
+
+    // Called in Death Animation
+    private void Reset()
+    {
+        IsAlive = true;
         transform.position = _startPosition.position;
         _character.enabled = true;
+        _canMove = true;
         Health = _maxHealth;
+        _character.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        _animator.SetTrigger(_idleTriggerHash);
     }
 }

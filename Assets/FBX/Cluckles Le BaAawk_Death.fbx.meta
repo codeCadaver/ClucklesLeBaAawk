@@ -1,35 +1,14 @@
 fileFormatVersion: 2
-guid: 8bb6f4a7951214245a75b4c07c8eddc5
+guid: 3e960d8847bbee4418e73b442c155b9c
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable:
   - first:
-      74: 2712627032250637016
-    second: FightStance
-  - first:
-      74: 3499728582831962634
-    second: _TPose
-  - first:
-      74: 778045159576330300
-    second: Float
-  - first:
-      74: -3100369314251171874
-    second: Idle
-  - first:
-      74: 5539831331247536789
-    second: Jump
-  - first:
-      74: -7497848331705974981
-    second: Land
-  - first:
       74: 2353680664591731088
     second: Punch
   - first:
-      74: -7559799517050087169
-    second: Punch.Left
-  - first:
-      74: 5522812681064789136
-    second: Run
+      74: 4348485665485846014
+    second: Death
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -50,7 +29,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 0
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -113,15 +92,15 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: Root
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 9629fc536e0ea574c93c86c0b4d608cf, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

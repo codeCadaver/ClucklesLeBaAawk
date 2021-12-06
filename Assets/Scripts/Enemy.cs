@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public int Health { get; private set; }
 
     [SerializeField] private int _maxHealth;
+    [SerializeField] private int _attackPower = 2;
 
     private void Start()
     {
@@ -34,6 +35,15 @@ public class Enemy : MonoBehaviour, IDamageable
     private void OnTriggerEnter(Collider other)
     {
         _numHits++;
-        // Debug.Log($"Hit by: {other.name} {_numHits} times");
+        IDamageable playerHit = other.GetComponent<IDamageable>();
+        if (playerHit == null) return;
+        playerHit.Damage(_attackPower);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        IDamageable playerHit = other.collider.GetComponent<IDamageable>();
+        playerHit.Damage(_attackPower);
+        Debug.Log($"Player Damaged by: {_attackPower}");
     }
 }
