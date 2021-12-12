@@ -14,6 +14,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private float _speed = 10f;
     [SerializeField] private int _maxHealth = 3;
     [SerializeField] private Transform _startPosition;
+    [SerializeField] private GameObject _smokeFX;
 
     private int _deathTriggerHash = Animator.StringToHash("DeathTrigger");
     private int _idleTriggerHash = Animator.StringToHash("IdleTrigger");
@@ -208,11 +209,24 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    private void ShowSmokeFX()
+    {
+        if (IsAlive)
+        {
+            GameObject smokeFX = Instantiate(_smokeFX, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            var redSmokeFX = Instantiate(Resources.Load<GameObject>("RedSmokeParticleFX"), transform.position, Quaternion.identity);
+        }
+    }
+
     // Called in Death Animation
     private void Reset()
     {
         IsAlive = true;
         transform.position = _startPosition.position;
+        ShowSmokeFX();
         _character.enabled = true;
         _canMove = true;
         Health = _maxHealth;

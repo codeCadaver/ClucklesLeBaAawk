@@ -39,11 +39,4 @@ public class Enemy : MonoBehaviour, IDamageable
         if (playerHit == null) return;
         playerHit.Damage(_attackPower);
     }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        IDamageable playerHit = other.collider.GetComponent<IDamageable>();
-        playerHit.Damage(_attackPower);
-        Debug.Log($"Player Damaged by: {_attackPower}");
-    }
 }
